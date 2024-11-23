@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
-import {Box} from '@chakra-ui/react'
-import SingleChat from '../SingleChat'
+import {Box, Spinner} from '@chakra-ui/react'
 
+const SingleChat = React.lazy(()=>import("../SingleChat.jsx"))
 const ChatBox = ({fetchAgain,setFetchAgain}) => {
   const{selectedChat}=ChatState()
   return (
@@ -15,7 +15,9 @@ const ChatBox = ({fetchAgain,setFetchAgain}) => {
     borderRadius='lg'
     borderWidth='1px'
     >
+      <Suspense fallback={<Spinner size='lg'/>}>
       <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      </Suspense>
     </Box>
   )
 }

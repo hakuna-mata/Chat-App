@@ -1,9 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const  User  = require("../models/userModel");
-const {genToken} = require("../config/generateToken")
+const {genToken,validate,validatePass} = require("../config/generateToken")
 
 module.exports.registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, pic } = req.body;
+
+    if(!validate(email) || !validatePass(password)){
+        throw new Error("Enter valid credentials")
+    }
 
     if (!name || !email || !password) {
         res.status(400)
@@ -59,5 +63,7 @@ module.exports.allUsers = asyncHandler(async(req,res)=>{
     // let keyword = req.query.search ? {$or:[{name:{$regex:req.query.search,$options:"i"}},{email:{$regex:req.query.search,$options:"i"}}]}:{}
                   
     const users = req.query.search ? await User.find({$or:[{name:{$regex:req.query.search,$options:"i"}},{email:{$regex:req.query.search,$options:"i"}}]}).find({_id:{$ne:req.user._id}}):{}
+    // console.log("API CALL MADE");
+    
     res.send(users)
 })

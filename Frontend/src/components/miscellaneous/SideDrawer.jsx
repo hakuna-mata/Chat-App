@@ -111,9 +111,9 @@ const SideDrawer = () => {
           <Menu>
             <MenuButton p={1} >
               <Badge count={notification.length}>
-                <MailOutlined style={{ fontSize: 24 }} />
+                <MailOutlined style={{ fontSize: 24,marginTop:"8px",color:"brown" }} />
               </Badge>
-              <BellIcon fontSize='2xl' m={1} />
+              <BellIcon fontSize='3xl' m={1} color="gold" fontWeight="bold" />
             </MenuButton>
             <MenuList pl={4} >
               {!notification?.length && <p style={{ color: "red" }} >No new messages</p>}

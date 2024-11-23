@@ -1,12 +1,12 @@
-const express = require("express");
 require("dotenv").config();
+const express = require("express");
 const cors = require("cors");
 const main = require("../Backend/config/db");
-const colors = require("colors");
 const userRoutes = require("./routes/userRoutes.js");
 const chatRoutes = require("./routes/chatRoutes.js")
 const messageRoutes = require("./routes/messageRoutes.js")
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware.js");
+
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.use(errorHandler);
 
 
 let server = app.listen(process.env.PORT, () => {
-    console.log(`App listening on port ${process.env.PORT}`.yellow.bold);
+    console.log(`App listening on port ${process.env.PORT}`);
 });
 
 const io = require("socket.io")(server,{
@@ -43,16 +43,28 @@ const io = require("socket.io")(server,{
     }
 })
 
+const activeUsers = new Set();
+
 io.on("connection", (socket) => {
     // console.log(socket)
     console.log("Connected to socket.io");
 
     socket.on("setup", (userData) => {
         socket.join(userData._id); // User joins their own room
-        console.log("User room (on setup):", userData._id);
+        console.log("User room on setup:", userData._id);
         socket.emit("connected");
+
+        // Add user to active users
+        socket.userId = userData._id;  // Store userID on the socket object
+        activeUsers.add(userData._id);
+        console.log(activeUsers);
+        
+        io.emit("active users", Array.from(activeUsers)); 
+        // socket.emit("connected");
     });
 
+    
+    
     socket.on("join chat", (room) => {
         socket.join(room);
         console.log("User joined chat room:", room);
@@ -70,8 +82,14 @@ io.on("connection", (socket) => {
         });
     })
 
-    socket.off("setup",()=>{
-        console.log("User Disconnected");
-        socket.leave(userData._id)
-    })
+
+    socket.on("disconnect", () => {
+        // Check if the socket has a userId stored
+        if (socket.userId) {
+            activeUsers.delete(socket.userId);  // Remove the user from activeUsers
+            io.emit("active users", Array.from(activeUsers));
+            console.log("User disconnected:", socket.userId);
+            console.log("Active users after disconnect:", Array.from(activeUsers));
+        }
+    });
 });

@@ -13,6 +13,10 @@ const messageModel = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Chat"
     },
+    time:{
+        type:Date,
+        default:new Date()
+    }
 
 },
     { timestamps: true }

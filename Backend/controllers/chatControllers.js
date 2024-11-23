@@ -33,8 +33,10 @@ module.exports.accessChat = asyncHandler(async (req, res) => {
         try {
             const createdChat = await Chat.create(chatData);
 
+            
             const FullChat = await Chat.findOne({ _id: createdChat._id })
                 .populate("users", "-password");
+              
             res.status(200).send(FullChat);
         } catch (error) {
             res.status(400);
@@ -45,7 +47,7 @@ module.exports.accessChat = asyncHandler(async (req, res) => {
 
 module.exports.fetchChats = asyncHandler(async (req, res) => {
     try {
-        // Use $in to check if req.user._id exists in the users array
+        //  $in to check if req.user._id exists in the users array
         const results = await Chat.find({ users: { $in: [req.user._id] } })
             .populate("users", "-password")
             .populate("groupAdmin", "-password")

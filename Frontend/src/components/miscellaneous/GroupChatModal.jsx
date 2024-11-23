@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -17,6 +17,7 @@ import axios from 'axios'
 import UserListItem from '../UserAvatar/UserListItem'
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import ChatLoading from '../ChatLoading'
+import _ from 'lodash'
 
 const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -30,9 +31,8 @@ const GroupChatModal = ({ children }) => {
 
   const { user, chats, setChats } = ChatState()
 
-  const handleSearch = async (query) => {
-    setSearch(query)
-    if (!query) {
+  const handleSearch = async (search) => {
+    if (!search) {
       return;
     }
     try {
@@ -62,6 +62,15 @@ const GroupChatModal = ({ children }) => {
         position: "bottom-left"
       })
     }
+  }
+
+  const debouncedFetchData = useCallback(
+    _.debounce((value)=>handleSearch(value),300),[]
+  )
+
+  const handleChange = (value)=>{
+    setSearch(value)
+    debouncedFetchData(value)
   }
 
   const handleDelete = (delUser)=>{
@@ -142,7 +151,7 @@ const GroupChatModal = ({ children }) => {
               <Input placeholder='Chat name' mb={3} onChange={(e) => setGroupChatName(e.target.value)} />
             </FormControl>
             <FormControl>
-              <Input placeholder='Add users eg:Virat,Rohit,Rahul' mb={1} onChange={(e) => handleSearch(e.target.value)} />
+              <Input placeholder='Add users eg:Virat,Rohit,Rahul' mb={1} onChange={(e) => handleChange(e.target.value)} />
             </FormControl>
             
             <Box display='flex' w='100%' flexWrap='wrap' >
