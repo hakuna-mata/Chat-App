@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon Backend/server.js",
     "server":"nodemon Backend/server.js",
-    "build":"npm install && npm install --prefix Frontend && npm run build --prefix Frontend"
+    "build":"npm install && npm install --prefix Frontend && npm run build --prefix Frontend",
+    "migrate": "node migrate.js"
   },
   "keywords": [],
   "author": "",
