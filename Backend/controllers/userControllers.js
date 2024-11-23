@@ -4,6 +4,10 @@ const {genToken,validate,validatePass} = require("../config/generateToken")
 
 module.exports.registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, pic } = req.body;
+    console.log(validate(email));
+    console.log(validatePass(password));
+    console.log(!validate(email));
+    console.log(!validatePass(password));
 
     if(!validate(email) || !validatePass(password)){
         throw new Error("Enter valid credentials")
@@ -60,7 +64,7 @@ module.exports.authUser = asyncHandler(async(req,res)=>{
 })
 
 module.exports.allUsers = asyncHandler(async(req,res)=>{
-    // let keyword = req.query.search ? {$or:[{name:{$regex:req.query.search,$options:"i"}},{email:{$regex:req.query.search,$options:"i"}}]}:{}
+    
                   
     const users = req.query.search ? await User.find({$or:[{name:{$regex:req.query.search,$options:"i"}},{email:{$regex:req.query.search,$options:"i"}}]}).find({_id:{$ne:req.user._id}}):{}
     // console.log("API CALL MADE");

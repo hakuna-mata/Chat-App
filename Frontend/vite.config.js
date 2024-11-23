@@ -1,10 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import replace from '@rollup/plugin-replace';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    global: {},
+    global: {}, // Define `global` to avoid issues with libraries expecting Node.js globals
   },
-  plugins: [react()],
-})
+  plugins: [
+    react(), // Vite plugin for React
+    replace({
+      preventAssignment: true, // Ensure that replacements won't be reassigned
+      values: {
+        'eval': '0', // Replace 'eval' with a safer alternative (use cautiously)
+      },
+    }),
+  ],
+});
