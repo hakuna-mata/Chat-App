@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "start": "nodemon Backend/server.js",
+    "server": "nodemon Backend/server.js",
+    "build": "cd Backend && npm run migrate && cd ../Frontend && npm run build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
