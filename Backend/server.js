@@ -41,11 +41,12 @@ if (process.env.NODE_ENV === "production") {
         console.log("Serving index.html for:", req.url);
         res.sendFile(indexPath);
     });
-} else {
-    app.get("/", (req, res) => {
-        res.send("API Running successfully");
-    });
 }
+//  else {
+//     app.get("/", (req, res) => {
+//         res.send("API Running successfully");
+//     });
+// }
 
 
 // Custom error handling middleware
