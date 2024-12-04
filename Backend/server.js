@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "production") {
 
     app.get("*", (req, res) => {
         const indexPath = path.resolve(staticPath, "index.html");
-        console.log("Serving index.html for:", req.url);
+        // console.log("Serving index.html for:", req.url);
         res.sendFile(indexPath);
     });
 }
@@ -54,11 +54,6 @@ app.use(errorHandler);
 
 // console.log("Static files served from:", path.join(__dirname1, "Frontend/dist"));
 // console.log("Index.html path:", path.resolve(__dirname1, "Frontend", "dist", "index.html"));
-
-
-
-
-
 
 console.log("Serving static files from:", path.join(__dirname, "../Frontend/dist"));
 

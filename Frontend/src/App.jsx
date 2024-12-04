@@ -1,4 +1,4 @@
-import { Spinner } from '@chakra-ui/react'
+import { Spinner,Center } from '@chakra-ui/react'
 import './App.css'
 import React, { Suspense } from 'react'
 import {Route,Routes} from 'react-router-dom'
@@ -9,7 +9,9 @@ function App() {
   return (
     <>
       <div className="app">
-        <Suspense fallback={<Spinner size='lg'/>}>
+        <Suspense fallback={ <Center height="100vh" flexDirection="column">
+        <Spinner size="xl" ml="180px" color="blue.500" />
+      </Center>}>
         <Routes>
         <Route path='/' element={<HomePage/>}/>
         <Route path="/chats" element={<ChatPage/>}/>

@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
-import { Container, Box, Text ,Tabs,Tab,TabList,TabPanels,TabPanel } from "@chakra-ui/react"
+import { Container, Box, Text, Tabs, Tab, TabList, TabPanels, TabPanel } from "@chakra-ui/react"
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/Signup";
 import { useNavigate } from "react-router-dom";
+import ErrorFallback from "../components/miscellaneous/ErrorFallback";
+import { ErrorBoundary } from 'react-error-boundary'
 
 const HomePage = () => {
     const navigate = useNavigate()
 
-    useEffect(()=>{
+    useEffect(() => {
         const user = JSON.parse(localStorage.getItem("userInfo"))
-        if(user){
+        if (user) {
             navigate("/chats")
         }
-    },[navigate])
+    }, [navigate])
     return (
         <>
             <Container maxW="xl" centerContent >
@@ -36,10 +38,15 @@ const HomePage = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <Login/>
+                                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                                    <Login />
+                                </ErrorBoundary>
+
                             </TabPanel>
                             <TabPanel>
-                                <Signup/>
+                                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                                    <Signup />
+                                </ErrorBoundary>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

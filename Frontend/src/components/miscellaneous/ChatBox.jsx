@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import {Box, Spinner} from '@chakra-ui/react'
-
+import ErrorFallback from './ErrorFallback.jsx'
+import {ErrorBoundary} from 'react-error-boundary'
 const SingleChat = React.lazy(()=>import("../SingleChat.jsx"))
 const ChatBox = ({fetchAgain,setFetchAgain}) => {
   const{selectedChat}=ChatState()
@@ -16,7 +17,9 @@ const ChatBox = ({fetchAgain,setFetchAgain}) => {
     borderWidth='1px'
     >
       <Suspense fallback={<Spinner size='lg'/>}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
       <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      </ErrorBoundary>
       </Suspense>
     </Box>
   )

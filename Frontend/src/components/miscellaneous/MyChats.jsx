@@ -7,13 +7,13 @@ import { AddIcon } from '@chakra-ui/icons'
 import { getSender, getSenderFull } from '../../config/chatLogics'
 import ChatLoading from '../ChatLoading'
 import GroupChatModal from './GroupChatModal'
-import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react'
+import { Avatar, AvatarBadge,  defineStyle } from '@chakra-ui/react'
 
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState()
 
-  const { selectedChat, setSelectedChat, user, chats, setChats, activeUsers, setActiveUsers } = ChatState()
+  const { selectedChat, setSelectedChat, user, chats, setChats, activeUsers ,notification,setNotification} = ChatState()
   // console.log(activeUsers);
 
   const toast = useToast()
@@ -32,6 +32,15 @@ const MyChats = ({ fetchAgain }) => {
 
   const isUserActive = (userId) => activeUsers.includes(userId);
 
+  const ringCss = defineStyle({
+    outlineWidth: "2px",
+    outlineColor: "green.500",
+    outlineOffset: "2px",
+    outlineStyle: "solid",
+  })
+
+  // console.log(notification);
+  
   const fetchChats = async () => {
     try {
       const config = {
@@ -92,7 +101,7 @@ const MyChats = ({ fetchAgain }) => {
             {chats.map((chat) => (
 
               <Box
-                onClick={() => setSelectedChat(chat)}
+                onClick={() =>{ setSelectedChat(chat) ;setNotification(notification.filter((notif)=>notif.chat._id!==chat._id))}}
                 cursor='pointer'
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}

@@ -1,18 +1,20 @@
 import React, { useState } from 'react'
-import { Avatar, Box, Button, Input, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip, Toast, useToast } from '@chakra-ui/react'
+import { Avatar, Box, Button, Input, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip,HStack, Toast, useToast } from '@chakra-ui/react'
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChatState } from "../../Context/ChatProvider"
 import ProfileModel from './ProfileModel'
 import { useNavigate } from 'react-router-dom'
 import { useDisclosure } from '@chakra-ui/hooks'
+import Avtr from '../UserAvatar/Avtr'
 import ChatLoading from '../ChatLoading'
 import axios from 'axios'
 import UserListItem from '../UserAvatar/UserListItem'
 import { Spinner } from '@chakra-ui/spinner'
-import { color } from 'framer-motion'
 import { getSender } from '../../config/chatLogics'
 import { Badge } from 'antd'
 import { MailOutlined } from '@ant-design/icons';
+import { FaWhatsapp } from "react-icons/fa";
+
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("")
@@ -22,6 +24,7 @@ const SideDrawer = () => {
   const toast = useToast()
 
   const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
+  
   let navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const logoutHandler = () => {
@@ -63,9 +66,6 @@ const SideDrawer = () => {
     }
   }
 
-  // console.log(notification);
-
-
   const accessChat = async (userId) => {
     try {
       setLoadingChat(true)
@@ -104,16 +104,29 @@ const SideDrawer = () => {
             <Text d={{ base: 'none', md: 'flex' }} px='4'>Search user</Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily='Work-sans'>
-          Talk-A-Tive
-        </Text>
+        <Text fontSize="2xl" fontFamily="Work-sans" display="inline-flex" alignItems="center">
+        Message-Pulse
+        <FaWhatsapp  size={44} style={{ marginLeft: "10px",color:"green" }} /> 
+      </Text>
+        
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>{notification?.length? [...new Map(notification.map((notif) => [notif.chat._id, notif])).values()].map((notif) => (
+    <Avtr
+      key={notif._id}
+      notif={notif}
+      handleFunction={() => {
+        setSelectedChat(notif.chat);
+        setNotification(notification.filter((n) => n.chat._id !== notif.chat._id));
+      }}
+    />
+  )):""}</div>
         <div>
           <Menu>
+          
             <MenuButton p={1} >
               <Badge count={notification.length}>
                 <MailOutlined style={{ fontSize: 24,marginTop:"8px",color:"brown" }} />
               </Badge>
-              <BellIcon fontSize='3xl' m={1} color="gold" fontWeight="bold" />
+              <BellIcon fontSize='3xl' m={1} color="goldenrod" fontWeight="bold" />
             </MenuButton>
             <MenuList pl={4} >
               {!notification?.length && <p style={{ color: "red" }} >No new messages</p>}

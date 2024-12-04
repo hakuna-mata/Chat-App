@@ -19,8 +19,8 @@ export default defineConfig({
   build: {
     outDir: 'dist', // Output directory
   },
-  mode: 'production', // Set mode to production
-  esbuild: {
-    drop: ['console', 'debugger'], // Remove unnecessary logs
-  },
+  mode: 'production' // Set mode to production
+  // esbuild: {
+  //   drop: ['console', 'debugger'], // Remove unnecessary logs
+  // },
 });

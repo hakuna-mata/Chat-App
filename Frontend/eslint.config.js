@@ -1,38 +1,37 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import globals from "globals"; // Provides global variables like `window` and `document`
+import pluginJs from "@eslint/js"; // Core JavaScript rules
+import pluginReact from "eslint-plugin-react"; // React-specific linting rules
 
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
-  { ignores: ['dist'] },
+  // General settings for all JavaScript files
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.{js,mjs,cjs,jsx}"], // Apply to JavaScript and JSX files
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: globals.browser, // Enable browser globals
+      ecmaVersion: "latest", // Use the latest ECMAScript version
+      sourceType: "module", // Enable ES modules
       parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true, // Enable JSX syntax
+        },
       },
     },
-    settings: { react: { version: '18.3' } },
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
     rules: {
-      ...js.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
-      ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      ...pluginJs.configs.recommended.rules, // Use recommended JavaScript rules
     },
   },
-]
+  // React-specific settings
+  {
+    files: ["**/*.{jsx,tsx}"], // Apply only to JSX and TSX files
+    plugins: {
+      react: pluginReact,
+    },
+    rules: {
+      ...pluginReact.configs.recommended.rules, // Use recommended React rules
+      "react/react-in-jsx-scope": "off", // Not needed for React 17+
+      "react/jsx-no-undef": "error", // Ensure JSX elements are defined
+      "no-unused-vars": "warn"
+    },
+  },
+];

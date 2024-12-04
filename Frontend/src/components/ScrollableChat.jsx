@@ -72,6 +72,7 @@ const ScrollableChat = ({ messages }) => {
                   cursor: "pointer", 
                 }}
               >
+                
                 <div>{m.content}</div>
                 <div style={{ fontSize: "0.8em", color: "black" }}>
                   {new Date(m.createdAt).toLocaleTimeString()}

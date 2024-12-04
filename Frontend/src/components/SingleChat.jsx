@@ -11,6 +11,8 @@ import io from 'socket.io-client';
 import Lottie from 'react-lottie';
 import animationData from '../animation/typing.json';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {ErrorBoundary} from 'react-error-boundary'
+import ErrorFallback from './miscellaneous/ErrorFallback';
 
 const ENDPOINT = "http://localhost:8080";
 let socket;
@@ -65,7 +67,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     useEffect(() => {
         socket = io(ENDPOINT);
         socket.emit("setup", user);
-
+        
         socket.on("connected", () => setSocketConnected(true));
 
         socket.on("active users", (users) => setActiveUsers(users));
@@ -182,7 +184,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             <Spinner size="xl" w={20} h={20} alignSelf="center" margin="auto" />
                         ) : (
                             <div className='messages'>
+                                <ErrorBoundary FallbackComponent={ErrorFallback}>
                                 <ScrollableChat messages={messages} />
+                                </ErrorBoundary>
                             </div>
                         )}
                         <FormControl onKeyDown={sendMessage} isRequired mt={3}>
